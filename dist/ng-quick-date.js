@@ -52,7 +52,7 @@
   app.directive("quickDatepicker", [
     'ngQuickDateDefaults', '$filter', '$sce', function(ngQuickDateDefaults, $filter, $sce) {
       return {
-        restrict: "E",
+        restrict: "EA",
         require: "?ngModel",
         scope: {
           dateFilter: '=?',
@@ -181,6 +181,9 @@
             } else if (angular.isString(viewVal)) {
               ngModelCtrl.$setValidity('required', true);
               return scope.parseDateFunction(viewVal);
+            } else if (angular.isNumber(viewVal)) {
+              ngModelCtrl.$setValidity('required', true);
+              return new Date(viewVal);
             } else {
               return null;
             }
@@ -190,6 +193,8 @@
               return modelVal;
             } else if (angular.isString(modelVal)) {
               return scope.parseDateFunction(modelVal);
+            } else if (angular.isNumber(modelVal)) {
+              return new Date(modelVal);
             } else {
               return void 0;
             }
@@ -200,6 +205,8 @@
           stringToDate = function(date) {
             if (typeof date === 'string') {
               return parseDateString(date);
+            } else if (angular.isNumber(date)) {
+              return new Date(date);
             } else {
               return date;
             }
